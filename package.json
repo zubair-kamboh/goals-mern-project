@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Goals Setter App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node ./backend/server.js",
+    "server": "nodemon ./backend/server.js",
+    "client": "npm --prefix ./frontend run start",
+    "dev": "concurrently \"npm run server\" \"cd frontend && npm run start\""
+  },
+  "author": "Zubair Ali",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "express-async-handler": "^1.2.0",
+    "express-handlebars": "^6.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.2.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "nodemon": "^2.0.15"
+  }
+}

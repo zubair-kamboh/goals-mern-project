@@ -1,0 +1,27 @@
+<div class='container'>
+
+  <h1 class='text-primary text-center my-3'>Update Your Goal</h1>
+  <form method='post' action='/api/goals/{{data._id}}?_method=PUT'>
+    <div class='my-3'>
+      <label for='goal' class='form-label'>Add Your Goal</label>
+
+      {{#if data}}
+
+        {{log data}}
+        <input
+          type='text'
+          class='form-control'
+          id='goal'
+          placeholder='Learn MERN Stack in 2022'
+          name='text'
+          value='{{data.text}}'
+          autofocus
+        />
+
+      {{/if}}
+
+    </div>
+    <button type='submit' class='btn btn-primary'>Update</button>
+    <a href='/' type='button' class='btn btn-warning'>Go back</a>
+  </form>
+</div>
