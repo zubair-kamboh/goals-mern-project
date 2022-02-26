@@ -25,7 +25,7 @@ const setGoal = asyncHandler(async (req, res) => {
   const goal = await Goal.create({
     user: user._id,
     goal: req.body.goal,
-  })
+  }).populate('user')
 
   if (goal) {
     res.status(201)
@@ -47,12 +47,10 @@ const updateGoal = asyncHandler(async (req, res) => {
 
   if (!goal) {
     res.status(400)
-    throw new Error('Goal cannot be deleted')
+    throw new Error('Goal cannot be updated')
   }
 
-  const user = await userModel.findById(req.user.id)
-
-  if (!user) {
+  if (!req.user) {
     res.status(404)
     throw new Error('User not found')
   }
@@ -62,15 +60,17 @@ const updateGoal = asyncHandler(async (req, res) => {
     throw new Error('User not Authorized')
   }
 
-  Goal.findByIdAndUpdate(
+  const updatedGoal = await Goal.findByIdAndUpdate(
     { _id: req.params.id },
-    { goal: req.body.goal },
-    { returnDocument: 'after' },
-    (err, doc) => {
-      if (err) throw err
-      res.json(doc)
-    }
+    { goal: req.body.goal }
   )
+
+  if (!updatedGoal) {
+    throw new Error('Goal cannot be updated')
+  } else {
+    const allGoals = await Goal.find({ user: req.user._id }).populate('user')
+    res.json(allGoals)
+  }
 })
 
 // DELETE
@@ -82,9 +82,7 @@ const deleteGoal = asyncHandler(async (req, res) => {
     throw new Error('Goal cannot be deleted')
   }
 
-  const user = await userModel.findById(req.user.id)
-
-  if (!user) {
+  if (!req.user) {
     res.status(404)
     throw new Error('User not found')
   }
@@ -96,7 +94,8 @@ const deleteGoal = asyncHandler(async (req, res) => {
 
   await goal.remove()
 
-  res.json({ message: 'goal deleted with an id: ' + goal._id })
+  const allGoals = await Goal.find({ user: req.user._id }).populate('user')
+  res.json(allGoals)
 })
 
 module.exports = {

@@ -3,10 +3,10 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import { Button, Container, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
-import { Link, useNavigate } from 'react-router-dom'
-import { login, reset } from '../features/auth/authSlice'
+import { Link } from 'react-router-dom'
+import { login } from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import ClipLoader from 'react-spinners/ClipLoader'
+import RingLoader from 'react-spinners/RingLoader'
 import { toast } from 'react-toastify'
 import { css } from '@emotion/react'
 
@@ -18,25 +18,15 @@ export default function Signin() {
 
   const { email, password } = data
 
-  const { user, isError, isLoading, isSuccess } = useSelector(
-    (state) => state.auth
-  )
+  const { isError, isLoading, message } = useSelector((state) => state.auth)
 
-  const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // React.useEffect(() => {
-  //   if (isError) {
-  //     toast.error('Could not register the user')
-  //   }
-
-  //   if (isSuccess || user) {
-  //     toast.success('You are logged in!')
-  //     navigate('/')
-  //   }
-
-  //   dispatch(reset())
-  // }, [isError, isSuccess, user, navigate, dispatch])
+  React.useEffect(() => {
+    if (isError) {
+      toast.error(message.message)
+    }
+  }, [isError, message.message])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -61,15 +51,21 @@ export default function Signin() {
   }
   const override = css`
     display: block;
-    margin: 0 auto;
-    border-color: red;
   `
 
   if (isLoading) {
     return (
-      <div>
-        <ClipLoader
-          color="green"
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <RingLoader
+          color="#D0021B"
           loading={isLoading}
           css={override}
           size={150}
@@ -113,16 +109,16 @@ export default function Signin() {
             type="email"
             value={email}
             onChange={onChange}
-            InputLabelProps={{
-              style: {
-                color: 'white',
-              },
-            }}
-            sx={{
-              input: {
-                color: '#fff',
-              },
-            }}
+            // InputLabelProps={{
+            //   style: {
+            //     color: 'white',
+            //   },
+            // }}
+            // sx={{
+            //   input: {
+            //     color: '#fff',
+            //   },
+            // }}
           />
           <TextField
             id="password"
@@ -133,16 +129,16 @@ export default function Signin() {
             type="password"
             value={password}
             onChange={onChange}
-            InputLabelProps={{
-              style: {
-                color: 'white',
-              },
-            }}
-            sx={{
-              input: {
-                color: '#fff',
-              },
-            }}
+            // InputLabelProps={{
+            //   style: {
+            //     color: 'white',
+            //   },
+            // }}
+            // sx={{
+            //   input: {
+            //     color: '#fff',
+            //   },
+            // }}
           />
           <Button type="submit" variant="contained" color="primary">
             Login

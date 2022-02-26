@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { register, reset } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
+import { css } from '@emotion/react'
+import RingLoader from 'react-spinners/RingLoader'
 
 export default function Signup() {
   const [data, setData] = useState({
@@ -19,7 +21,7 @@ export default function Signup() {
 
   const { name, email, password, password2 } = data
 
-  const { user, isError, isLoading, isSuccess } = useSelector(
+  const { user, isError, isLoading, isSuccess, message } = useSelector(
     (state) => state.auth
   )
 
@@ -28,7 +30,7 @@ export default function Signup() {
 
   useEffect(() => {
     if (isError) {
-      toast.error('Could not register the user')
+      toast.error(message.message)
     }
 
     if (isSuccess || user) {
@@ -36,7 +38,7 @@ export default function Signup() {
     }
 
     dispatch(reset())
-  }, [isError, isSuccess, user, navigate, dispatch])
+  }, [isError, isSuccess, user, navigate, dispatch, message.message])
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -66,6 +68,31 @@ export default function Signup() {
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  const override = css`
+    display: block;
+  `
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <RingLoader
+          color="#D0021B"
+          loading={isLoading}
+          css={override}
+          size={150}
+        />
+      </div>
+    )
   }
 
   return (
@@ -103,16 +130,16 @@ export default function Signup() {
             name="name"
             value={name}
             onChange={onChange}
-            InputLabelProps={{
-              style: {
-                color: 'white',
-              },
-            }}
-            sx={{
-              input: {
-                color: '#fff',
-              },
-            }}
+            // InputLabelProps={{
+            //   style: {
+            //     color: 'white',
+            //   },
+            // }}
+            // sx={{
+            //   input: {
+            //     color: '#fff',
+            //   },
+            // }}
           />
           <TextField
             id="email"
@@ -123,16 +150,16 @@ export default function Signup() {
             value={email}
             name="email"
             onChange={onChange}
-            InputLabelProps={{
-              style: {
-                color: 'white',
-              },
-            }}
-            sx={{
-              input: {
-                color: '#fff',
-              },
-            }}
+            // InputLabelProps={{
+            //   style: {
+            //     color: 'white',
+            //   },
+            // }}
+            // sx={{
+            //   input: {
+            //     color: '#fff',
+            //   },
+            // }}
           />
 
           <TextField
@@ -144,16 +171,16 @@ export default function Signup() {
             type="password"
             value={password}
             onChange={onChange}
-            InputLabelProps={{
-              style: {
-                color: 'white',
-              },
-            }}
-            sx={{
-              input: {
-                color: '#fff',
-              },
-            }}
+            // InputLabelProps={{
+            //   style: {
+            //     color: 'white',
+            //   },
+            // }}
+            // sx={{
+            //   input: {
+            //     color: '#fff',
+            //   },
+            // }}
           />
           <TextField
             id="password2"
@@ -163,17 +190,17 @@ export default function Signup() {
             variant="outlined"
             name="password2"
             value={password2}
-            sx={{
-              input: {
-                color: '#fff',
-              },
-            }}
-            onChange={onChange}
-            InputLabelProps={{
-              style: {
-                color: 'white',
-              },
-            }}
+            // sx={{
+            //   input: {
+            //     color: '#fff',
+            //   },
+            // }}
+            // onChange={onChange}
+            // InputLabelProps={{
+            //   style: {
+            //     color: 'white',
+            //   },
+            // }}
           />
           <Button type="submit" variant="contained" color="primary">
             Submit

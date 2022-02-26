@@ -14,6 +14,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { logout, reset } from '../features/auth/authSlice'
+import { goalsReset } from '../features/goals/goalsSlice'
 
 const pages = ['Home', 'About', 'Contact']
 
@@ -22,7 +23,7 @@ const Header = () => {
 
   const dispatch = useDispatch()
 
-  const { user } = useSelector((state) => state.auth)
+  const { user, isLoading } = useSelector((state) => state.auth)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget)
@@ -35,11 +36,16 @@ const Header = () => {
   const onLogout = () => {
     dispatch(logout())
     dispatch(reset())
+    dispatch(goalsReset())
     toast('Success! logged out!')
   }
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar
+      position="static"
+      color="primary"
+      sx={isLoading ? { display: 'none' } : { display: 'block' }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography

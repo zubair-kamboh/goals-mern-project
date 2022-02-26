@@ -37,11 +37,10 @@ db()
 // routes
 // app.use('/', require('./routes/pageRoutes'))
 
+app.use(errorHandler)
 // api routes
 app.use('/api/goals', require('./routes/goalRoutes'))
 app.use('/api/users', require('./routes/userRoutes'))
 app.use('/api/posts', require('./routes/postRoutes'))
-
-app.use(errorHandler)
 
 app.listen(port, () => console.log(`server started at port ${port}`))
