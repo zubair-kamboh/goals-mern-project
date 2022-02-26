@@ -37,10 +37,25 @@ db()
 // routes
 // app.use('/', require('./routes/pageRoutes'))
 
-app.use(errorHandler)
 // api routes
 app.use('/api/goals', require('./routes/goalRoutes'))
 app.use('/api/users', require('./routes/userRoutes'))
 app.use('/api/posts', require('./routes/postRoutes'))
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/build')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, '../', 'frontend', 'build', 'index.html')
+    )
+  })
+} else {
+  app.get('*', (req, res) => {
+    res.send('helo')
+  })
+}
+
+app.use(errorHandler)
 
 app.listen(port, () => console.log(`server started at port ${port}`))
