@@ -16,7 +16,7 @@ export const getGoals = createAsyncThunk(
   'goals/all',
   async (token, ThunkAPI) => {
     try {
-      console.log(ThunkAPI.getState().auth.user)
+      const { token } = ThunkAPI.getState().auth.user
       return await goalService.getAllGoals(token)
     } catch (error) {
       const message =
@@ -49,9 +49,10 @@ export const updateGoal = createAsyncThunk(
 // delete goal
 export const deleteGoal = createAsyncThunk(
   'goals/delete',
-  async (deleteData, ThunkAPI) => {
+  async (id, ThunkAPI) => {
     try {
-      return await goalService.deleteGoal(deleteData)
+      const { token } = ThunkAPI.getState().auth.user
+      return await goalService.deleteGoal(id, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -65,34 +66,24 @@ export const deleteGoal = createAsyncThunk(
 )
 
 // add goal
-export const addGoal = createAsyncThunk(
-  'goals/add',
-  async (addData, ThunkAPI) => {
-    try {
-      return await goalService.addGoal(addData)
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
-      return ThunkAPI.rejectWithValue(message)
-    }
+export const addGoal = createAsyncThunk('goals/add', async (goal, ThunkAPI) => {
+  try {
+    const { _id, token } = ThunkAPI.getState().auth.user
+    return await goalService.addGoal(_id, token, goal)
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString()
+    return ThunkAPI.rejectWithValue(message)
   }
-)
+})
 
 export const goalsSlice = createSlice({
   name: 'goals',
   initialState,
   reducers: {
-    goalsReset: (state) => {
-      state.goals = null
-      state.isError = false
-      state.isSuccess = false
-      state.isLoading = false
-      state.message = ''
-    },
+    goalsReset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(getGoals.pending, (state) => {
@@ -134,7 +125,9 @@ export const goalsSlice = createSlice({
       state.isLoading = true
     })
     builder.addCase(deleteGoal.fulfilled, (state, actions) => {
-      state.goals = actions.payload
+      state.goals = state.goals.filter(
+        (goal) => goal._id !== actions.payload.id
+      )
       state.isLoading = false
       state.isSuccess = true
     })
@@ -148,8 +141,6 @@ export const goalsSlice = createSlice({
     // add goal
     builder.addCase(addGoal.pending, (state) => {
       state.isLoading = true
-      state.isSuccess = false
-      state.isError = false
     })
     builder.addCase(addGoal.fulfilled, (state, actions) => {
       state.goals.push(actions.payload)

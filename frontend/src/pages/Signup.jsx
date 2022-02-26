@@ -61,6 +61,7 @@ export default function Signup() {
       })
     )
     toast('Success! registered!')
+    navigate('/')
   }
 
   const onChange = (e) => {
@@ -130,16 +131,6 @@ export default function Signup() {
             name="name"
             value={name}
             onChange={onChange}
-            // InputLabelProps={{
-            //   style: {
-            //     color: 'white',
-            //   },
-            // }}
-            // sx={{
-            //   input: {
-            //     color: '#fff',
-            //   },
-            // }}
           />
           <TextField
             id="email"
@@ -150,16 +141,6 @@ export default function Signup() {
             value={email}
             name="email"
             onChange={onChange}
-            // InputLabelProps={{
-            //   style: {
-            //     color: 'white',
-            //   },
-            // }}
-            // sx={{
-            //   input: {
-            //     color: '#fff',
-            //   },
-            // }}
           />
 
           <TextField
@@ -171,16 +152,6 @@ export default function Signup() {
             type="password"
             value={password}
             onChange={onChange}
-            // InputLabelProps={{
-            //   style: {
-            //     color: 'white',
-            //   },
-            // }}
-            // sx={{
-            //   input: {
-            //     color: '#fff',
-            //   },
-            // }}
           />
           <TextField
             id="password2"
@@ -190,17 +161,7 @@ export default function Signup() {
             variant="outlined"
             name="password2"
             value={password2}
-            // sx={{
-            //   input: {
-            //     color: '#fff',
-            //   },
-            // }}
-            // onChange={onChange}
-            // InputLabelProps={{
-            //   style: {
-            //     color: 'white',
-            //   },
-            // }}
+            onChange={onChange}
           />
           <Button type="submit" variant="contained" color="primary">
             Submit

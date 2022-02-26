@@ -23,13 +23,7 @@ export default function AddGoal() {
       return toast.error('Please fill in the form')
     }
 
-    const data = {
-      user: user._id,
-      goal,
-      token: user.token,
-    }
-
-    dispatch(addGoal(data))
+    dispatch(addGoal(goal))
     navigate('/')
   }
 

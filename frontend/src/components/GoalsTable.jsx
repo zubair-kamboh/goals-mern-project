@@ -36,15 +36,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function GoalsTable({ goals }) {
   const dispatch = useDispatch()
-  const { user } = useSelector((state) => state.auth)
 
   const onDelete = (id) => {
-    const data = {
-      id,
-      token: user && user.token,
-    }
-
-    dispatch(deleteGoal(data))
+    dispatch(deleteGoal(id))
   }
 
   return (

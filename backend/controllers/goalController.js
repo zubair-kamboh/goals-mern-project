@@ -25,11 +25,13 @@ const setGoal = asyncHandler(async (req, res) => {
   const goal = await Goal.create({
     user: user._id,
     goal: req.body.goal,
-  }).populate('user')
+  })
 
-  if (goal) {
+  const populatedGoal = await Goal.findById(goal._id).populate('user')
+
+  if (populatedGoal) {
     res.status(201)
-    res.json(goal)
+    res.json(populatedGoal)
   } else {
     res.status(400)
     throw new Error('Goal cannot created')
@@ -94,8 +96,9 @@ const deleteGoal = asyncHandler(async (req, res) => {
 
   await goal.remove()
 
-  const allGoals = await Goal.find({ user: req.user._id }).populate('user')
-  res.json(allGoals)
+  res.json({
+    id: goal._id,
+  })
 })
 
 module.exports = {

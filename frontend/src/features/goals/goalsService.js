@@ -25,26 +25,27 @@ const updateGoal = async (updateData) => {
 }
 
 //  delete goal
-const deleteGoal = async (deleteData) => {
-  const res = await axios.delete(`/api/goals/${deleteData.id}`, {
+const deleteGoal = async (id, token) => {
+  const res = await axios.delete(`/api/goals/${id}`, {
     headers: {
-      Authorization: `Bearer ${deleteData.token}`,
+      Authorization: `Bearer ${token}`,
     },
   })
   return res.data
 }
 
 // add goal
-const addGoal = async (data) => {
+const addGoal = async (id, token, goal) => {
+  console.log(id, token, goal)
   const res = await axios.post(
-    `/api/goals/`,
+    `/api/goals`,
     {
-      user: data.user,
-      goal: data.goal,
+      user: id,
+      goal,
     },
     {
       headers: {
-        Authorization: `Bearer ${data.token}`,
+        Authorization: `Bearer ${token}`,
       },
     }
   )

@@ -1,9 +1,9 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import { Button, Container, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { login } from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import RingLoader from 'react-spinners/RingLoader'
@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 import { css } from '@emotion/react'
 
 export default function Signin() {
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     email: '',
     password: '',
   })
@@ -21,12 +21,13 @@ export default function Signin() {
   const { isError, isLoading, message } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isError) {
-      toast.error(message.message)
+      toast.error(message)
     }
-  }, [isError, message.message])
+  }, [isError, message])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -41,6 +42,8 @@ export default function Signin() {
         password,
       })
     )
+
+    navigate('/')
   }
 
   const onChange = (e) => {
@@ -49,6 +52,7 @@ export default function Signin() {
       [e.target.name]: e.target.value,
     }))
   }
+
   const override = css`
     display: block;
   `
@@ -97,8 +101,6 @@ export default function Signin() {
           sx={{
             '& > :not(style)': { m: 1, width: '100%' },
           }}
-          noValidate
-          autoComplete="off"
         >
           <TextField
             id="email"
@@ -109,16 +111,6 @@ export default function Signin() {
             type="email"
             value={email}
             onChange={onChange}
-            // InputLabelProps={{
-            //   style: {
-            //     color: 'white',
-            //   },
-            // }}
-            // sx={{
-            //   input: {
-            //     color: '#fff',
-            //   },
-            // }}
           />
           <TextField
             id="password"
@@ -129,16 +121,6 @@ export default function Signin() {
             type="password"
             value={password}
             onChange={onChange}
-            // InputLabelProps={{
-            //   style: {
-            //     color: 'white',
-            //   },
-            // }}
-            // sx={{
-            //   input: {
-            //     color: '#fff',
-            //   },
-            // }}
           />
           <Button type="submit" variant="contained" color="primary">
             Login
